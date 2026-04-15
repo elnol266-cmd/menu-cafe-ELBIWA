@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Pesanan - Kopi Digital</title>
+    <style>
+        body { font-family: sans-serif; background: #2c3e50; color: white; padding: 20px; }
+        .order-card { 
+            background: white; color: #333; padding: 15px; 
+            border-radius: 10px; margin-bottom: 15px; 
+            border-left: 8px solid #e67e22;
+        }
+        .order-header { display: flex; justify-content: space-between; font-weight: bold; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .status-btn { 
+            background: #27ae60; color: white; border: none; 
+            padding: 8px 15px; border-radius: 5px; cursor: pointer; margin-top: 10px;
+        }
+        .table-tag { background: #e67e22; color: white; padding: 2px 8px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+<h1>📥 Pesanan Masuk</h1>
+<div id="admin-orders">
+    <div class="order-card">
+        <div class="order-header">
+            <span>Meja: <span class="table-tag">05</span></span>
+            <span>10:30 WIB</span>
+        </div>
+        <p>1x Es Kopi Gula Aren<br>1x Croissant Butter</p>
+        <button class="status-btn" onclick="this.parentElement.style.opacity='0.5'">Tandai Selesai</button>
+    </div>
+</div>
+
+<script>
+    // Di dunia nyata, bagian ini akan menggunakan Firebase atau Socket.io 
+    // agar pesanan muncul otomatis tanpa refresh (Real-time).
+    function playSound() {
+        let audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3');
+        audio.play();
+    }
+    
+    // Simulasi bunyi saat ada pesanan baru
+    // playSound(); 
+</script>
+</body>
+</html>
