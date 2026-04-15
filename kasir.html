@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Kasir Pro - ELBIWA</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         :root {
@@ -22,17 +21,6 @@
         * { box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { margin: 0; background: var(--bg); height: 100vh; display: flex; overflow: hidden; }
 
-        /* --- LOGIN PAGE --- */
-        #login-page {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary)); 
-            display: flex; justify-content: center; align-items: center; z-index: 9999;
-        }
-        .login-card { background: rgba(255,255,255,0.1); padding: 40px; border-radius: 20px; backdrop-filter: blur(10px); text-align: center; color: white; width: 380px; border: 1px solid rgba(255,255,255,0.2); }
-        .login-input { width: 100%; padding: 15px; border-radius: 30px; border: none; margin-bottom: 15px; text-align: center; font-size: 1rem; }
-        .btn-login { width: 100%; padding: 15px; border-radius: 30px; border: none; background: var(--white); color: var(--primary); cursor: pointer; font-weight: bold; font-size: 1rem; transition: 0.3s; }
-        .btn-login:hover { background: #eee; transform: translateY(-2px); }
-
         /* --- SIDEBAR --- */
         .sidebar { width: 260px; background: linear-gradient(180deg, var(--primary), var(--secondary)); color: white; display: flex; flex-direction: column; padding: 20px 0; }
         .sidebar-brand { padding: 20px; font-weight: 800; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; text-transform: uppercase; }
@@ -40,9 +28,9 @@
         .nav-item:hover, .nav-item.active { opacity: 1; background: rgba(255,255,255,0.2); border-radius: 0 30px 30px 0; margin-right: 15px; }
 
         /* --- MAIN CONTENT --- */
-        .main-content { flex: 1; padding: 30px; overflow-y: auto; display: none; }
-        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
-        .stat-card { background: var(--white); padding: 20px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); cursor: pointer; transition: 0.3s; }
+        .main-content { flex: 1; padding: 30px; overflow-y: auto; }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: var(--white); padding: 20px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); cursor: pointer; }
         .stat-card.active { background: var(--primary); color: white; }
         .stat-info h4 { margin: 0; font-size: 0.8rem; opacity: 0.8; text-transform: uppercase; }
         .stat-info p { margin: 5px 0 0; font-size: 1.1rem; font-weight: bold; }
@@ -52,281 +40,260 @@
         th { text-align: left; color: var(--text-muted); padding: 12px; border-bottom: 2px solid #f4f4f4; font-size: 0.85rem; }
         td { padding: 15px 12px; border-bottom: 1px solid #f9f9f9; font-size: 0.9rem; }
 
-        .btn-blue { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 12px; cursor: pointer; font-weight: 600; transition: 0.3s; }
-        .btn-blue:hover { opacity: 0.9; transform: translateY(-2px); }
-        .btn-danger { background: var(--danger); color: white; border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer; }
+        .btn-blue { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 12px; cursor: pointer; font-weight: 600; }
+        .btn-success { background: var(--success); color: white; border: none; padding: 8px 15px; border-radius: 10px; cursor: pointer; text-decoration: none; display: inline-block; font-size: 0.8rem;}
+        .btn-danger { background: var(--danger); color: white; border: none; padding: 5px 10px; border-radius: 8px; cursor: pointer; }
 
-        .form-inline { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 10px; margin-bottom: 20px; background: #f9f9f9; padding: 20px; border-radius: 15px; }
-        input { padding: 10px; border-radius: 10px; border: 1px solid #ddd; }
+        select, input { padding: 12px; border-radius: 10px; border: 1px solid #ddd; width: 100%; margin-bottom: 15px; }
     </style>
 </head>
 <body>
 
-    <div id="login-page">
-        <div class="login-card">
-            <i class="fas fa-coffee fa-3x" style="margin-bottom: 20px;"></i>
-            <h1 style="margin-bottom: 30px; letter-spacing: 2px;">ELBIWA CAFE</h1>
-            <input type="text" class="login-input" placeholder="Username Admin">
-            <input type="password" class="login-input" placeholder="Password">
-            <button class="btn-login" onclick="login()">MASUK KE SISTEM</button>
-        </div>
-    </div>
-
-    <div class="sidebar" id="sidebar-main" style="display: none;">
-        <div class="sidebar-brand"><i class="fas fa-user-shield"></i> Administrasi</div>
+    <div class="sidebar">
+        <div class="sidebar-brand"><i class="fas fa-coffee"></i> ELBIWA CAFE</div>
         <div class="nav-item active" onclick="showPage('dashboard')"><i class="fas fa-chart-line"></i> Dashboard</div>
-        <div class="nav-item" onclick="showPage('stock')"><i class="fas fa-boxes"></i> Stok Barang</div>
-        <div class="nav-item" onclick="showPage('absensi')"><i class="fas fa-users"></i> Karyawan</div>
-        <div class="nav-item" onclick="showPage('settings')"><i class="fas fa-cog"></i> Settings</div>
+        <div class="nav-item" onclick="showPage('stok')"><i class="fas fa-boxes"></i> Stok Barang</div>
+        <div class="nav-item" onclick="showPage('karyawan')"><i class="fas fa-users"></i> Karyawan</div>
         <div class="nav-item" style="margin-top: auto;" onclick="location.reload()"><i class="fas fa-sign-out-alt"></i> Keluar</div>
     </div>
 
-    <div class="main-content" id="main-area">
-        
+    <div class="main-content">
         <div class="stats-grid">
-            <div class="stat-card" id="card-income">
+            <div class="stat-card" onclick="resetPemasukan()">
                 <div class="stat-info"><h4>Pemasukan</h4><p id="stat-pemasukan">IDR. 0</p></div>
-                <i class="fas fa-wallet fa-lg"></i>
+                <i class="fas fa-wallet fa-2x" style="color: var(--success)"></i>
             </div>
-            <div class="stat-card" id="card-outcome">
-                <div class="stat-info"><h4>Pengeluaran</h4><p>IDR. 0</p></div>
-                <i class="fas fa-hand-holding-usd fa-lg"></i>
+            <div class="stat-card active">
+                <div class="stat-info"><h4>Status</h4><p>Siap Transaksi</p></div>
+                <i class="fas fa-cash-register fa-2x"></i>
             </div>
-            <div class="stat-card active" id="card-dashboard">
-                <div class="stat-info"><h4>Kasir</h4><p>Transaksi</p></div>
-                <i class="fas fa-cash-register fa-lg"></i>
-            </div>
-            <div class="stat-card" id="card-stock">
-                <div class="stat-info"><h4>Total Stok</h4><p id="stat-total-stok">0 Items</p></div>
-                <i class="fas fa-cubes fa-lg"></i>
+            <div class="stat-card">
+                <div class="stat-info"><h4>Stok</h4><p id="stat-total-stok">0 Items</p></div>
+                <i class="fas fa-cubes fa-2x" style="color: #e67e22"></i>
             </div>
         </div>
 
         <div id="page-dashboard" class="sub-page">
-            <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px;">
+            <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 20px;">
                 <div class="card">
-                    <h3>Transaksi Baru</h3>
-                    <label>Pilih Menu</label><br>
-                    <select id="sel-menu" style="width:100%; padding:12px; margin:10px 0; border-radius:10px; border:1px solid #ddd;">
-                        <option value="18000">Es Kopi Gula Aren - 18k</option>
-                        <option value="15000">Americano Ice - 15k</option>
-                        <option value="25000">Croissant Cheese - 25k</option>
-                    </select><br>
+                    <h3><i class="fas fa-shopping-cart"></i> Transaksi Baru</h3>
+                    <label>Pilih Menu</label>
+                    <select id="sel-menu"></select>
                     <label>Jumlah (Qty)</label>
-                    <input type="number" id="sel-qty" value="1" min="1" style="width:100%; margin-top:10px;">
-                    <div style="text-align: right; margin-top: 20px;">
-                        <button class="btn-blue" onclick="processOrder()">Bayar & Cetak</button>
-                    </div>
+                    <input type="number" id="sel-qty" value="1" min="1">
+                    <button class="btn-blue" onclick="processOrder()" style="width: 100%; padding: 15px;">Proses Bayar</button>
                 </div>
+
                 <div class="card">
-                    <h3>Statistik Penjualan</h3>
-                    <canvas id="myChart"></canvas>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h3><i class="fas fa-history"></i> Riwayat Terakhir</h3>
+                        <button onclick="downloadExcel()" class="btn-success"><i class="fas fa-file-excel"></i> Export</button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr><th>Waktu</th><th>Item</th><th>Total</th></tr>
+                        </thead>
+                        <tbody id="transaksi-body"></tbody>
+                    </table>
                 </div>
             </div>
         </div>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-    <h3>Riwayat Transaksi</h3>
-    <button class="btn-blue" onclick="downloadExcel()" style="background: #27ae60;">
-        <i class="fas fa-file-excel"></i> Download Laporan (.xlsx)
-    </button>
-</div>
-<table id="table-transaksi">
-    <thead>
-        <tr>
-            <th>Waktu</th>
-            <th>Item</th>
-            <th>Total</th>
-        </tr>
-    </thead>
-    <tbody id="transaksi-body">
-        </tbody>
-</table>
 
-        <div id="page-stock" class="sub-page" style="display:none">
+        <div id="page-stok" class="sub-page" style="display:none">
             <div class="card">
-                <h3>Manajemen Stok Barang</h3>
-                <div class="form-inline">
+                <h3><i class="fas fa-edit"></i> Manajemen Stok</h3>
+                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
                     <input type="text" id="in-name" placeholder="Nama Barang">
-                    <input type="number" id="in-price" placeholder="Harga Satuan">
-                    <input type="number" id="in-qty" placeholder="Jumlah Stok">
-                    <button class="btn-blue" onclick="addStock()">Tambah Barang</button>
+                    <input type="number" id="in-price" placeholder="Harga">
+                    <input type="number" id="in-qty" placeholder="Stok">
+                    <button class="btn-blue" onclick="addStock()">Tambah</button>
                 </div>
                 <table>
-                    <thead><tr><th>No</th><th>Item Name</th><th>Price</th><th>Stock</th><th>Aksi</th></tr></thead>
-                    <tbody id="stock-table-body"></tbody>
+                    <thead>
+                        <tr><th>Nama</th><th>Harga</th><th>Stok</th><th>Aksi</th></tr>
+                    </thead>
+                    <tbody id="stok-body"></tbody>
                 </table>
             </div>
         </div>
 
-        <div id="page-absensi" class="sub-page" style="display:none">
-            <div class="card"><h3>Daftar Karyawan</h3><p>Data absensi karyawan muncul di sini...</p></div>
+        <div id="page-karyawan" class="sub-page" style="display:none">
+            <div class="card">
+                <h3><i class="fas fa-user-plus"></i> Tambah Karyawan</h3>
+                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                    <input type="text" id="emp-name" placeholder="Nama Karyawan">
+                    <input type="text" id="emp-pos" placeholder="Jabatan">
+                    <button class="btn-blue" onclick="addEmployee()">Tambah</button>
+                </div>
+            </div>
+            <div class="card">
+                <h3>Daftar Karyawan</h3>
+                <table>
+                    <thead>
+                        <tr><th>No</th><th>Nama</th><th>Jabatan</th><th>Aksi</th></tr>
+                    </thead>
+                    <tbody id="employee-body"></tbody>
+                </table>
+            </div>
         </div>
-        <div id="page-settings" class="sub-page" style="display:none">
-            <div class="card"><h3>Pengaturan Akun</h3><p>Ganti password admin...</p></div>
-        </div>
-
     </div>
 
     <script>
-        // DATA STATE
-        let stockData = JSON.parse(localStorage.getItem('elbiwaStock')) || [
-            { id: 1, name: 'Es Kopi Gula Aren', price: 18000, qty: 50 },
-            { id: 2, name: 'Americano Ice', price: 15000, qty: 30 }
-        ];
-        let totalIncome = 0;
+        // Data Initialization
+        let stockData = JSON.parse(localStorage.getItem('elbiwaStock')) || [];
+        let historyTransaksi = JSON.parse(localStorage.getItem('elbiwaHistory')) || [];
+        let employeeData = JSON.parse(localStorage.getItem('elbiwaEmployees')) || [];
 
-        // LOGIN
-        function login() {
-            document.getElementById('login-page').style.display = 'none';
-            document.getElementById('sidebar-main').style.display = 'flex';
-            document.getElementById('main-area').style.display = 'block';
-            initChart();
-            renderStock();
-        }
-
-        // NAVIGASI
+        // Navigasi
         function showPage(pageId) {
             document.querySelectorAll('.sub-page').forEach(p => p.style.display = 'none');
             document.getElementById('page-' + pageId).style.display = 'block';
+            
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.querySelectorAll('.stat-card').forEach(c => c.classList.remove('active'));
-            document.getElementById('card-' + pageId).classList.add('active');
+            const activeNav = Array.from(document.querySelectorAll('.nav-item')).find(n => n.innerText.toLowerCase().includes(pageId));
+            if(activeNav) activeNav.classList.add('active');
         }
 
         // --- FITUR STOK ---
-        function renderStock() {
-            const tbody = document.getElementById('stock-table-body');
-            tbody.innerHTML = '';
-            let totalItems = 0;
-
-            stockData.forEach((item, index) => {
-                totalItems += item.qty;
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td><strong>${item.name}</strong></td>
-                        <td>IDR. ${item.price.toLocaleString()}</td>
-                        <td><button onclick="updateQty(${item.id}, -1)">-</button> <b>${item.qty}</b> <button onclick="updateQty(${item.id}, 1)">+</button></td>
-                        <td><button class="btn-danger" onclick="deleteStock(${item.id})"><i class="fas fa-trash"></i></button></td>
-                    </tr>
-                `;
-            });
-            document.getElementById('stat-total-stok').innerText = totalItems + " Items";
-            localStorage.setItem('elbiwaStock', JSON.stringify(stockData));
-        }
-
         function addStock() {
             const name = document.getElementById('in-name').value;
             const price = parseInt(document.getElementById('in-price').value);
             const qty = parseInt(document.getElementById('in-qty').value);
-            if(name && price && qty) {
+
+            if (name && !isNaN(price) && !isNaN(qty)) {
                 stockData.push({ id: Date.now(), name, price, qty });
-                renderStock();
+                updateAll();
                 document.getElementById('in-name').value = '';
                 document.getElementById('in-price').value = '';
                 document.getElementById('in-qty').value = '';
-            }
-        }
-
-        function updateQty(id, change) {
-            const item = stockData.find(i => i.id === id);
-            if(item && item.qty + change >= 0) {
-                item.qty += change;
-                renderStock();
+            } else {
+                alert("Mohon isi semua kolom stok dengan angka yang benar!");
             }
         }
 
         function deleteStock(id) {
-            if(confirm("Hapus barang dari daftar?")) {
-                stockData = stockData.filter(i => i.id !== id);
-                renderStock();
-            }
+            stockData = stockData.filter(s => s.id !== id);
+            updateAll();
         }
 
         // --- FITUR TRANSAKSI ---
         function processOrder() {
-            const price = parseInt(document.getElementById('sel-menu').value);
+            const menuId = document.getElementById('sel-menu').value;
             const qty = parseInt(document.getElementById('sel-qty').value);
-            totalIncome += (price * qty);
-            document.getElementById('stat-pemasukan').innerText = "IDR. " + totalIncome.toLocaleString();
-            alert("Pembayaran Berhasil!");
+            const item = stockData.find(i => i.id == menuId);
+
+            if (!item) return alert("Pilih menu terlebih dahulu!");
+            if (item.qty < qty) return alert("Stok tidak mencukupi!");
+
+            item.qty -= qty;
+            const total = item.price * qty;
+            historyTransaksi.push({ 
+                waktu: new Date().toLocaleString('id-ID'), 
+                item: `${item.name} (x${qty})`, 
+                total: total 
+            });
+            
+            updateAll();
+            alert("Transaksi Berhasil!");
         }
 
-        // --- CHART ---
-        function initChart() {
-            const ctx = document.getElementById('myChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Okt', 'Nov', 'Des', 'Jan'],
-                    datasets: [{
-                        label: 'Penjualan',
-                        data: [45, 60, 85, 40],
-                        backgroundColor: '#4facfe',
-                        borderRadius: 10
-                    }]
-                },
-                options: { responsive: true, plugins: { legend: { display: false } } }
+        function resetPemasukan() {
+            if(confirm("Hapus semua riwayat transaksi?")) {
+                historyTransaksi = [];
+                updateAll();
+            }
+        }
+
+        // --- FITUR KARYAWAN ---
+        function addEmployee() {
+            const name = document.getElementById('emp-name').value;
+            const pos = document.getElementById('emp-pos').value;
+            if (name && pos) {
+                employeeData.push({ id: Date.now(), name, pos });
+                localStorage.setItem('elbiwaEmployees', JSON.stringify(employeeData));
+                document.getElementById('emp-name').value = '';
+                document.getElementById('emp-pos').value = '';
+                renderEmployees();
+            } else {
+                alert("Isi nama dan jabatan karyawan!");
+            }
+        }
+
+        function deleteEmployee(id) {
+            employeeData = employeeData.filter(e => e.id !== id);
+            localStorage.setItem('elbiwaEmployees', JSON.stringify(employeeData));
+            renderEmployees();
+        }
+
+        function renderEmployees() {
+            const body = document.getElementById('employee-body');
+            body.innerHTML = '';
+            employeeData.forEach((e, index) => {
+                body.innerHTML += `<tr>
+                    <td>${index + 1}</td>
+                    <td>${e.name}</td>
+                    <td>${e.pos}</td>
+                    <td><button class="btn-danger" onclick="deleteEmployee(${e.id})">Hapus</button></td>
+                </tr>`;
             });
         }
+
+        // --- FITUR EXPORT EXCEL ---
+        function downloadExcel() {
+            if(historyTransaksi.length === 0) return alert("Tidak ada data untuk di-export!");
+            const worksheet = XLSX.utils.json_to_sheet(historyTransaksi);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Laporan Penjualan");
+            XLSX.writeFile(workbook, "Laporan_ELBIWA.xlsx");
+        }
+
+        // --- CORE UPDATE ---
+        function updateAll() {
+            localStorage.setItem('elbiwaStock', JSON.stringify(stockData));
+            localStorage.setItem('elbiwaHistory', JSON.stringify(historyTransaksi));
+            
+            // Update Stats
+            const totalIncome = historyTransaksi.reduce((sum, h) => sum + h.total, 0);
+            document.getElementById('stat-pemasukan').innerText = "IDR. " + totalIncome.toLocaleString('id-ID');
+            
+            const totalQty = stockData.reduce((sum, s) => sum + s.qty, 0);
+            document.getElementById('stat-total-stok').innerText = totalQty + " Items";
+
+            // Update Tabel Stok
+            const stokBody = document.getElementById('stok-body');
+            stokBody.innerHTML = '';
+            stockData.forEach(s => {
+                stokBody.innerHTML += `<tr>
+                    <td>${s.name}</td>
+                    <td>IDR ${s.price.toLocaleString('id-ID')}</td>
+                    <td>${s.qty}</td>
+                    <td><button onclick="deleteStock(${s.id})" class="btn-danger">Hapus</button></td>
+                </tr>`;
+            });
+
+            // Update Dropdown Dashboard
+            const selMenu = document.getElementById('sel-menu');
+            selMenu.innerHTML = '<option value="">-- Pilih Menu --</option>';
+            stockData.forEach(s => {
+                selMenu.innerHTML += `<option value="${s.id}">${s.name} (Stok: ${s.qty})</option>`;
+            });
+
+            // Update Tabel Riwayat (Dashboard)
+            const transBody = document.getElementById('transaksi-body');
+            transBody.innerHTML = '';
+            [...historyTransaksi].reverse().slice(0, 5).forEach(h => {
+                transBody.innerHTML += `<tr>
+                    <td>${h.waktu}</td>
+                    <td>${h.item}</td>
+                    <td>IDR ${h.total.toLocaleString('id-ID')}</td>
+                </tr>`;
+            });
+        }
+
+        window.onload = () => {
+            updateAll();
+            renderEmployees();
+        };
     </script>
-    <script>
-        // Simpan semua riwayat transaksi dalam array
-let historyTransaksi = JSON.parse(localStorage.getItem('elbiwaHistory')) || [];
-
-function processOrder() {
-    const menuEl = document.getElementById('sel-menu');
-    const itemName = menuEl.options[menuEl.selectedIndex].text.split(' -')[0];
-    const price = parseInt(menuEl.value);
-    const qty = parseInt(document.getElementById('sel-qty').value);
-    const total = price * qty;
-    const waktu = new Date().toLocaleString('id-ID');
-
-    // Tambah ke data pemasukan
-    totalIncome += total;
-    document.getElementById('stat-pemasukan').innerText = "IDR. " + totalIncome.toLocaleString();
-
-    // Simpan ke riwayat untuk Excel
-    const dataBaru = { Waktu: waktu, Menu: itemName, Jumlah: qty, Total: total };
-    historyTransaksi.push(dataBaru);
-    localStorage.setItem('elbiwaHistory', JSON.stringify(historyTransaksi));
-
-    // Update tampilan tabel di dashboard
-    renderTableTransaksi();
-    alert("Pembayaran Berhasil!");
-}
-
-function renderTableTransaksi() {
-    const tbody = document.getElementById('transaksi-body');
-    if(!tbody) return;
-    tbody.innerHTML = '';
-    // Tampilkan 5 transaksi terakhir saja di UI agar tidak penuh
-    historyTransaksi.slice(-5).reverse().forEach(t => {
-        tbody.innerHTML += `<tr><td>${t.Waktu}</td><td>${t.Menu} (x${t.Jumlah})</td><td>IDR. ${t.Total.toLocaleString()}</td></tr>`;
-    });
-}
-
-// FUNGSI UTAMA DOWNLOAD EXCEL
-function downloadExcel() {
-    if (historyTransaksi.length === 0) {
-        alert("Belum ada data transaksi untuk didownload!");
-        return;
-    }
-
-    // 1. Buat worksheet dari data array
-    const worksheet = XLSX.utils.json_to_sheet(historyTransaksi);
-    
-    // 2. Buat workbook baru
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Laporan Penjualan");
-
-    // 3. Generate file dan otomatis download
-    const fileName = "Laporan_Penjualan_ELBIWA_" + new Date().getMonth() + ".xlsx";
-    XLSX.writeFile(workbook, fileName);
-}
-
-// Panggil saat load
-renderTableTransaksi();
-</script>
 </body>
 </html>
