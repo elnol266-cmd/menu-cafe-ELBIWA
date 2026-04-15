@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kopi Digital - Pesan Instan</title>
+    <style>
+        :root {
+            --primary-color: #6f4e37;
+            --secondary-color: #28a745;
+            --bg-color: #f8f9fa;
+        }
+
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0; 
+            background: var(--bg-color); 
+            padding-bottom: 80px; /* Jarak agar tidak tertutup tombol keranjang */
+        }
+
+        header { 
+            background: var(--primary-color); 
+            color: white; 
+            padding: 1rem; 
+            text-align: center; 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .container { padding: 15px; max-width: 600px; margin: auto; }
+
+        .table-info { 
+            background: #fff; 
+            padding: 12px; 
+            border-radius: 8px; 
+            margin-bottom: 20px; 
+            font-weight: bold; 
+            text-align: center;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .menu-item { 
+            background: white; 
+            border-radius: 12px; 
+            padding: 15px; 
+            margin-bottom: 15px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+        }
+
+        .menu-info h3 { margin: 0; font-size: 1.1rem; color: #333; }
+        .menu-info p { margin: 5px 0; color: #888; font-size: 0.9rem; }
+
+        .btn-add { 
+            background: var(--primary-color); 
+            color: white; 
+            border: none; 
+            padding: 10px 18px; 
+            border-radius: 20px; 
+            cursor: pointer; 
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn-add:active { transform: scale(0.9); }
+
+        #cart-bar { 
+            position: fixed; 
+            bottom: 20px; 
+            left: 50%; 
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 500px;
+            background: var(--secondary-color); 
+            color: white; 
+            padding: 15px; 
+            text-align: center; 
+            display: none; 
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            cursor: pointer;
+            z-index: 2000;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>☕ Kopi Digital</h1>
+</header>
+
+<div class="container">
+    <div class="table-info" id="display-table">Mendeteksi Meja...</div>
+
+    <div id="menu-list">
+        <div class="menu-item">
+            <div class="menu-info">
+                <h3>Es Kopi Gula Aren</h3>
+                <p>Rp 18.000</p>
+            </div>
+            <button class="btn-add" onclick="addToCart('Es Kopi Gula Aren', 18000)">Tambah</button>
+        </div>
+
+        <div class="menu-item">
+            <div class="menu-info">
+                <h3>Americano Ice</h3>
+                <p>Rp 15.000</p>
+            </div>
+            <button class="btn-add" onclick="addToCart('Americano Ice', 15000)">Tambah</button>
+        </div>
+
+        <div class="menu-item">
+            <div class="menu-info">
+                <h3>Croissant Cheese</h3>
+                <p>Rp 25.000</p>
+            </div>
+            <button class="btn-add" onclick="addToCart('Croissant Cheese', 25000)">Tambah</button>
+        </div>
+    </div>
+</div>
+
+<div id="cart-bar" onclick="checkout()">
+    🛒 Konfirmasi Pesanan (<span id="cart-count">0</span>)
+</div>
+
+<script>
+    // 1. Logika Deteksi Nomor Meja dari URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const tableNumber = urlParams.get('table') || "Tanpa Nomor";
+    document.getElementById('display-table').innerText = "📍 Meja Nomor: " + tableNumber;
+
+    let cart = [];
+
+    // 2. Fungsi Tambah ke Keranjang
+    function addToCart(name, price) {
+        cart.push({name, price});
+        updateCartBar();
+    }
+
+    // 3. Update Tampilan Tombol Keranjang
+    function updateCartBar() {
+        const bar = document.getElementById('cart-bar');
+        const count = document.getElementById('cart-count');
+        if (cart.length > 0) {
+            bar.style.display = 'block';
+            count.innerText = cart.length;
+        }
+    }
+
+    // 4. Fungsi Checkout (Simulasi kirim ke kasir)
+    function checkout() {
+        let total = cart.reduce((sum, item) => sum + item.price, 0);
+        let daftarPesanan = cart.map(i => `- ${i.name}`).join('\n');
+        
+        alert(`PESANAN DIKIRIM!\n\nNomor Meja: ${tableNumber}\n\nItem:\n${daftarPesanan}\n\nTotal: Rp ${total.toLocaleString('id-ID')}`);
+        
+        // Reset keranjang setelah pesan
+        cart = [];
+        document.getElementById('cart-bar').style.display = 'none';
+    }
+</script>
+
+</body>
+</html>
