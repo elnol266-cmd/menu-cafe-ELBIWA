@@ -163,6 +163,303 @@
         cart = [];
         document.getElementById('cart-bar').style.display = 'none';
     }
+
+    <!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kopi Digital - Pesan Instan</title>
+    <style>
+        :root {
+            --primary-color: #6f4e37;
+            --secondary-color: #28a745;
+            --bg-color: #f4f1ee;
+            --dark-text: #332a24;
+        }
+
+        body { 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            margin: 0; 
+            background: var(--bg-color); 
+            color: var(--dark-text);
+            padding-bottom: 100px;
+        }
+
+        header { 
+            background: var(--primary-color); 
+            color: white; 
+            padding: 1.5rem 1rem; 
+            text-align: center; 
+            position: sticky; 
+            top: 0; 
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .container { padding: 20px; max-width: 600px; margin: auto; }
+
+        .table-info { 
+            background: white; 
+            padding: 15px; 
+            border-radius: 15px; 
+            margin-bottom: 25px; 
+            font-weight: bold; 
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--primary-color);
+        }
+
+        /* Menu Styling */
+        .menu-item { 
+            background: white; 
+            border-radius: 18px; 
+            padding: 15px; 
+            margin-bottom: 15px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03); 
+        }
+
+        .menu-info h3 { margin: 0; font-size: 1.1rem; }
+        .menu-info p { margin: 5px 0 0; color: var(--primary-color); font-weight: bold; }
+
+        .btn-add-main { 
+            background: var(--primary-color); 
+            color: white; 
+            border: none; 
+            padding: 10px 20px; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            font-weight: 600;
+        }
+
+        /* Modal / Pop-up Styling */
+        #modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: flex-end; /* Pop up dari bawah untuk mobile */
+        }
+
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 25px 25px 0 0;
+            padding: 25px;
+            animation: slideUp 0.3s ease-out;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .modal-header h2 { margin: 0; font-size: 1.4rem; }
+        .close-modal { font-size: 1.8rem; cursor: pointer; color: #888; }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .qty-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #f0f0f0;
+            padding: 5px 12px;
+            border-radius: 10px;
+        }
+
+        .btn-qty {
+            background: white;
+            border: 1px solid #ddd;
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .total-price {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .btn-confirm {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 15px;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        /* Floating Cart Bar */
+        #cart-bar { 
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 500px; background: var(--primary-color); 
+            color: white; padding: 18px; text-align: center; display: none; 
+            border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>☕ Kopi Digital</h1>
+</header>
+
+<div class="container">
+    <div class="table-info" id="display-table">Mendeteksi Meja...</div>
+
+    <div id="menu-list">
+        <div class="menu-item">
+            <div class="menu-info">
+                <h3>Es Kopi Gula Aren</h3>
+                <p>Rp 18.000</p>
+            </div>
+            <button class="btn-add-main" onclick="addToCart('Es Kopi Gula Aren', 18000)">Tambah</button>
+        </div>
+
+        <div class="menu-item">
+            <div class="menu-info">
+                <h3>Americano Ice</h3>
+                <p>Rp 15.000</p>
+            </div>
+            <button class="btn-add-main" onclick="addToCart('Americano Ice', 15000)">Tambah</button>
+        </div>
+
+        <div class="menu-item">
+            <div class="menu-info">
+                <h3>Croissant Butter</h3>
+                <p>Rp 25.000</p>
+            </div>
+            <button class="btn-add-main" onclick="addToCart('Croissant Butter', 25000)">Tambah</button>
+        </div>
+    </div>
+</div>
+
+<div id="cart-bar" onclick="toggleModal(true)">
+    🛒 Lihat Pesanan (<span id="cart-count">0</span>)
+</div>
+
+<div id="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Konfirmasi Pesanan</h2>
+            <span class="close-modal" onclick="toggleModal(false)">&times;</span>
+        </div>
+        
+        <div id="cart-items-list">
+            </div>
+
+        <div class="total-price">
+            <span>Total Bayar:</span>
+            <span id="total-amount">Rp 0</span>
+        </div>
+
+        <button class="btn-confirm" onclick="sendOrder()">Pesan Sekarang</button>
+    </div>
+</div>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const tableNumber = urlParams.get('table') || "Umum";
+    document.getElementById('display-table').innerText = "📍 Meja Nomor: " + tableNumber;
+
+    let cart = {};
+
+    function addToCart(name, price) {
+        if (cart[name]) {
+            cart[name].qty += 1;
+        } else {
+            cart[name] = { price: price, qty: 1 };
+        }
+        renderCart();
+    }
+
+    function changeQty(name, delta) {
+        if (cart[name]) {
+            cart[name].qty += delta;
+            if (cart[name].qty <= 0) {
+                delete cart[name];
+            }
+        }
+        renderCart();
+    }
+
+    function renderCart() {
+        const listElement = document.getElementById('cart-items-list');
+        const cartBar = document.getElementById('cart-bar');
+        const countElement = document.getElementById('cart-count');
+        const totalElement = document.getElementById('total-amount');
+        
+        listElement.innerHTML = '';
+        let total = 0;
+        let itemCount = 0;
+
+        for (let name in cart) {
+            let item = cart[name];
+            total += item.price * item.qty;
+            itemCount += item.qty;
+
+            listElement.innerHTML += `
+                <div class="cart-item">
+                    <div>
+                        <strong>${name}</strong><br>
+                        <small>Rp ${item.price.toLocaleString()}</small>
+                    </div>
+                    <div class="qty-controls">
+                        <button class="btn-qty" onclick="changeQty('${name}', -1)">-</button>
+                        <span>${item.qty}</span>
+                        <button class="btn-qty" onclick="changeQty('${name}', 1)">+</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        countElement.innerText = itemCount;
+        totalElement.innerText = `Rp ${total.toLocaleString('id-ID')}`;
+        cartBar.style.display = itemCount > 0 ? 'block' : 'none';
+        
+        if (itemCount === 0) toggleModal(false);
+    }
+
+    function toggleModal(show) {
+        document.getElementById('modal-overlay').style.display = show ? 'flex' : 'none';
+    }
+
+    function sendOrder() {
+        alert("Pesanan Meja " + tableNumber + " telah terkirim ke dapur!");
+        cart = {};
+        renderCart();
+        toggleModal(false);
+    }
+</script>
+
+</body>
+</html>
 </script>
 
 </body>
