@@ -290,6 +290,33 @@
         renderCart();
         toggleModal(false);
     }
+
+    // Contoh data stok yang diambil dari database
+let stokBarang = {
+    "Es Kopi Gula Aren": 40,
+    "Americano Ice": 15,
+    "Croissant Butter": 0 // Stok habis
+};
+
+function addToCart(name, price) {
+    // Cek apakah stok masih ada
+    if (stokBarang[name] > 0) {
+        if (cart[name]) {
+            // Cek lagi agar tidak memesan melebihi sisa stok
+            if (cart[name].qty < stokBarang[name]) {
+                cart[name].qty += 1;
+            } else {
+                alert("Maaf, sisa stok tidak mencukupi!");
+                return;
+            }
+        } else {
+            cart[name] = { price: price, qty: 1 };
+        }
+        renderCart();
+    } else {
+        alert("Maaf, menu ini sedang habis!");
+    }
+}
 </script>
 
 </body>
