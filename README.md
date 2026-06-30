@@ -80,7 +80,7 @@ Sistem ini menggunakan struktur data NoSQL terpusat sebagai berikut:
     }
 
 
-⚙️ Petunjuk Instalasi & Penggunaan
+### ⚙️ Petunjuk Instalasi & Penggunaan
 Karena proyek ini sepenuhnya berbasis client-side, Anda tidak perlu melakukan proses compile atau instalasi package managers.
 
 Clone Repositori:
@@ -91,7 +91,7 @@ cd elbiwa-view
 Konfigurasi Firebase (Opsional):
 Aplikasi ini sudah dikonfigurasi dengan Firebase bawaan. Jika Anda ingin menggunakan database sendiri, ganti objek firebaseConfig pada file kasir.html dan pembeli.html:
 
-JavaScript
+ ## JavaScript Code 
 const firebaseConfig = {
     apiKey: "YOUR_API_KEY",
     authDomain: "YOUR_AUTH_DOMAIN",
@@ -109,5 +109,3 @@ Buka pembeli.html untuk mensimulasikan antarmuka pemesanan pelanggan.
 
 📝 Lisensi
 Proyek ini didistribusikan di bawah lisensi MIT. Silakan gunakan dan kembangkan sesuai kebutuhan operasional bisnis Anda.
-  }
-}
