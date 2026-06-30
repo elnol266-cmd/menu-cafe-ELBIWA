@@ -78,34 +78,3 @@ Sistem ini menggunakan struktur data NoSQL terpusat sebagai berikut:
       "pos": "Barista",
       "shift": "Pagi"
     }
-
-
-### ⚙️ Petunjuk Instalasi & Penggunaan
-Karena proyek ini sepenuhnya berbasis client-side, Anda tidak perlu melakukan proses compile atau instalasi package managers.
-
-Clone Repositori:
-
-Bash
-git clone [https://github.com/username-anda/elbiwa-view.git](https://github.com/username-anda/elbiwa-view.git)
-cd elbiwa-view
-Konfigurasi Firebase (Opsional):
-Aplikasi ini sudah dikonfigurasi dengan Firebase bawaan. Jika Anda ingin menggunakan database sendiri, ganti objek firebaseConfig pada file kasir.html dan pembeli.html:
-
- ## JavaScript Code 
-const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    databaseURL: "YOUR_DATABASE_URL",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
-};
-Jalankan Aplikasi:
-
-Buka kasir.html di browser Anda untuk masuk ke panel admin (Default Kredensial: Username: admin | Password: kopiElbiwa2026).
-
-Buka pembeli.html untuk mensimulasikan antarmuka pemesanan pelanggan.
-
-📝 Lisensi
-Proyek ini didistribusikan di bawah lisensi MIT. Silakan gunakan dan kembangkan sesuai kebutuhan operasional bisnis Anda.
