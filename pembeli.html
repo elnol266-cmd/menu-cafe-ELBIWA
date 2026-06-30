@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Order - ELBIWA VIEW</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --stone-950: #0c0a09;
+            --stone-900: #1c1917;
+            --amber-400: #fbbf24;
+            --amber-500: #f59e0b;
+            --bg: #faf8f5;
+            --white: #ffffff;
+            --danger: #ef4444;
+            --border: rgba(28, 25, 23, 0.08);
+        }
+
+        * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 0; }
+        body { background: var(--bg); color: var(--stone-900); padding-bottom: 100px; }
+
+        /* --- HEADER DENGAN LOGO & TULISAN TINGKAT TINGGI (KEREN) --- */
+        header { 
+            background: linear-gradient(180deg, var(--stone-950) 0%, var(--stone-900) 100%); 
+            color: white; 
+            padding: 40px 20px; 
+            text-align: center; 
+            border-bottom-left-radius: 2.5rem; 
+            border-bottom-right-radius: 2.5rem; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
+            border-bottom: 2px solid rgba(251, 191, 36, 0.15);
+        }
+        
+        .logo-container {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            margin-bottom: 8px;
+        }
+
+        /* Ikon Kopi Samping Nama */
+        .logo-icon {
+            font-size: 2.4rem;
+            color: var(--amber-400);
+            filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.6));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        header h1 { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 2.4rem; 
+            font-weight: 800; 
+            letter-spacing: 1.5px;
+            line-height: 1.2;
+            text-shadow: 2px 4px 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        header .logo-white { 
+            color: #ffffff; 
+            background: linear-gradient(to bottom, #ffffff, #d6d3d1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        header .logo-amber { 
+            color: var(--amber-400); 
+            background: linear-gradient(to bottom, #ffe4e6, var(--amber-400));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+        }
+        
+        header p { 
+            font-size: 0.85rem; 
+            letter-spacing: 4px; 
+            text-transform: uppercase; 
+            margin-top: 6px; 
+            color: #a8a29e; 
+            font-weight: 600;
+            opacity: 0.8;
+        }
+
+        /* Efek Animasi Melayang Halus pada Ikon Kopi */
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-4px) rotate(3deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        /* --- LAYOUT UTAMA --- */
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+
+        .form-identitas { background: var(--white); padding: 20px; border-radius: 1.5rem; border: 1px solid var(--border); box-shadow: 0 4px 15px rgba(0,0,0,0.01); margin-bottom: 25px; }
+        .form-identitas h3 { font-family: 'Playfair Display', serif; margin-bottom: 15px; font-size: 1.1rem; }
+        .form-group { display: flex; gap: 10px; margin-bottom: 10px; }
+        input, select { padding: 12px 16px; border-radius: 10px; border: 1px solid #e5e7eb; font-size: 0.9rem; background: #fff; }
+        #cust-table { flex: 0.4; }
+        #cust-name { flex: 0.6; }
+
+        .section-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 15px; margin-top: 10px; display: flex; align-items: center; gap: 8px; }
+
+        /* --- KATALOG MENU --- */
+        .menu-grid { display: flex; flex-direction: column; gap: 15px; }
+        .menu-card { background: var(--white); border-radius: 1.25rem; border: 1px solid var(--border); padding: 15px; display: flex; gap: 15px; align-items: center; position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.01); }
+        .menu-img { width: 80px; height: 80px; border-radius: 12px; object-fit: cover; background: #eee; }
+        .menu-info { flex: 1; }
+        .menu-info h4 { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+        .menu-info .price { color: var(--amber-500); font-weight: 700; font-size: 0.95rem; }
+        .menu-info .stock { font-size: 0.75rem; color: #6b7280; margin-top: 4px; }
+
+        /* --- CONTROLLER TOMBOL + DAN - --- */
+        .qty-control { display: flex; align-items: center; gap: 8px; background: var(--bg); padding: 4px 8px; border-radius: 30px; border: 1px solid #e5e7eb; }
+        .btn-qty { width: 28px; height: 28px; border-radius: 50%; border: none; font-size: 14px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        .btn-qty.minus { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+        .btn-qty.minus:hover { background: var(--danger); color: white; }
+        .btn-qty.plus { background: var(--stone-950); color: white; }
+        .btn-qty.plus:hover { background: var(--stone-900); }
+        .qty-val { font-weight: 700; min-width: 16px; text-align: center; font-size: 0.9rem; }
+
+        /* --- BOTTOM CART BAR --- */
+        .cart-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--stone-950); color: white; padding: 20px; border-top-left-radius: 1.5rem; border-top-right-radius: 1.5rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 -10px 30px rgba(0,0,0,0.1); z-index: 999; }
+        .cart-bar-info p { font-size: 0.75rem; opacity: 0.6; text-transform: uppercase; }
+        .cart-bar-info h3 { font-size: 1.3rem; color: var(--amber-400); font-weight: 700; margin-top: 2px; }
+        .btn-order { background: var(--amber-400); color: var(--stone-950); border: none; padding: 14px 28px; border-radius: 12px; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-order:hover:not(:disabled) { background: var(--amber-500); transform: translateY(-1px); }
+        .btn-order:disabled { background: #44403c; color: #78716c; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <i class="fas fa-mug-hot logo-icon"></i>
+            <h1><span class="logo-white">ELBIWA</span> <span class="logo-amber">VIEW</span></h1>
+        </div>
+        <p>DIGITAL ORDER SYSTEM</p>
+    </header>
+
+    <div class="container">
+        <div class="form-identitas">
+            <h3><i class="fas fa-user-tag" style="color: var(--amber-500);"></i> Data Meja & Pelanggan</h3>
+            <div class="form-group">
+                <select id="cust-table">
+                    <option value="">-- Meja --</option>
+                    <option value="1">Meja 1</option>
+                    <option value="2">Meja 2</option>
+                    <option value="3">Meja 3</option>
+                    <option value="4">Meja 4</option>
+                    <option value="5">Meja 5</option>
+                    <option value="6">Meja 6</option>
+                </select>
+                <input type="text" id="cust-name" placeholder="Nama Lengkap Anda...">
+            </div>
+        </div>
+
+        <h3 class="section-title"><i class="fas fa-coffee" style="color: var(--stone-950);"></i> Pilihan Menu Kami</h3>
+        <div class="menu-grid" id="menu-container">
+            </div>
+    </div>
+
+    <div class="cart-bar">
+        <div class="cart-bar-info">
+            <p id="cart-item-count">0 Item Terpilih</p>
+            <h3 id="cart-total-price">Rp 0</h3>
+        </div>
+        <button id="btn-submit-order" class="btn-order" onclick="submitOrder()" disabled>
+            KIRIM PESANAN <i class="fas fa-paper-plane"></i>
+        </button>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCcubFJBvTHe3GxoACSOtyVLwn-i-EyjOc",
+            authDomain: "el-projec-fed51.firebaseapp.com",
+            databaseURL: "https://el-projec-fed51-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "el-projec-fed51",
+            storageBucket: "el-projec-fed51.firebasestorage.app",
+            messagingSenderId: "107490293937",
+            appId: "1:107490293937:web:010ea332586c5deff0696c"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        let dbProducts = {}; 
+        let customerCart = {}; 
+
+        database.ref('produk').on('value', snap => {
+            dbProducts = snap.val() || {};
+            renderMenuKatalog();
+        });
+
+        function renderMenuKatalog() {
+            const container = document.getElementById('menu-container');
+            container.innerHTML = '';
+
+            for (let key in dbProducts) {
+                const prod = dbProducts[key];
+                const itemNama = prod.nama_produk || prod.nama;
+                const itemHarga = parseInt(prod.harga) || 0;
+                const itemStok = prod.stok !== undefined ? prod.stok : 0;
+                const itemGambar = prod.gambar || 'https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&q=80&w=150';
+
+                const currentQty = customerCart[key] ? customerCart[key].jumlah : 0;
+
+                let controlHTML = '';
+                if (currentQty > 0) {
+                    controlHTML = `
+                        <div class="qty-control">
+                            <button class="btn-qty minus" onclick="updateCartQty('${key}', -1)">-</button>
+                            <span class="qty-val">${currentQty}</span>
+                            <button class="btn-qty plus" onclick="updateCartQty('${key}', 1)">+</button>
+                        </div>`;
+                } else {
+                    controlHTML = `
+                        <button class="btn-qty plus" style="border-radius: 8px; width: auto; padding: 6px 14px; font-size: 0.8rem; font-weight:600;" 
+                            onclick="updateCartQty('${key}', 1)" ${itemStok <= 0 ? 'disabled' : ''}>
+                            ${itemStok <= 0 ? 'Habis' : 'Tambah +'}
+                        </button>`;
+                }
+
+                container.innerHTML += `
+                    <div class="menu-card" style="${itemStok <= 0 ? 'opacity: 0.6;' : ''}">
+                        <img src="${itemGambar}" class="menu-img" alt="${itemNama}">
+                        <div class="menu-info">
+                            <h4>${itemNama}</h4>
+                            <p class="price">Rp ${itemHarga.toLocaleString('id-ID')}</p>
+                            <p class="stock">${itemStok <= 0 ? '<span style="color:var(--danger); font-weight:600;">Stok Habis</span>' : `Sisa Stok: ${itemStok}`}</p>
+                        </div>
+                        <div>
+                            ${controlHTML}
+                        </div>
+                    </div>`;
+            }
+            updateCartSummary();
+        }
+
+        function updateCartQty(productKey, delta) {
+            const product = dbProducts[productKey];
+            if (!product) return;
+
+            const itemNama = product.nama_produk || product.nama;
+            const itemHarga = parseInt(product.harga) || 0;
+            const maxStock = product.stok !== undefined ? product.stok : 0;
+
+            if (!customerCart[productKey]) {
+                customerCart[productKey] = {
+                    nama: itemNama,
+                    harga: itemHarga,
+                    jumlah: 0
+                };
+            }
+
+            const targetQty = customerCart[productKey].jumlah + delta;
+
+            if (targetQty > maxStock) {
+                alert(`Maaf, Anda tidak dapat memesan lebih dari sisa stok kami (${maxStock} item).`);
+                return;
+            }
+
+            customerCart[productKey].jumlah = targetQty;
+
+            if (customerCart[productKey].jumlah <= 0) {
+                delete customerCart[productKey];
+            }
+
+            renderMenuKatalog();
+        }
+
+        function updateCartSummary() {
+            let totalItems = 0;
+            let totalBill = 0;
+
+            for (let key in customerCart) {
+                totalItems += customerCart[key].jumlah;
+                totalBill += customerCart[key].harga * customerCart[key].jumlah;
+            }
+
+            document.getElementById('cart-item-count').innerText = `${totalItems} Menu Terpilih`;
+            document.getElementById('cart-total-price').innerText = "Rp " + totalBill.toLocaleString('id-ID');
+
+            document.getElementById('btn-submit-order').disabled = (totalItems <= 0);
+        }
+
+        function submitOrder() {
+            const tableNum = document.getElementById('cust-table').value;
+            const custName = document.getElementById('cust-name').value.trim();
+
+            if (!tableNum) return alert("Silakan pilih nomor meja Anda terlebih dahulu!");
+            if (!custName) return alert("Silakan masukkan nama lengkap Anda!");
+
+            document.getElementById('btn-submit-order').disabled = true;
+
+            let itemsArray = [];
+            let totalBayar = 0;
+
+            for (let key in customerCart) {
+                itemsArray.push({
+                    nama: customerCart[key].nama,
+                    jumlah: customerCart[key].jumlah
+                });
+                totalBayar += customerCart[key].harga * customerCart[key].jumlah;
+            }
+
+            database.ref('pesanan_masuk').push({
+                nomor_meja: tableNum,
+                nama_pelanggan: custName,
+                status: "Pending",
+                total_bayar: totalBayar,
+                items: itemsArray
+            }).then(() => {
+                alert("Pesanan Anda berhasil dikirim! Silakan tunggu di meja, barista & kitchen kami akan segera menyiapkan pesanan Anda.");
+                customerCart = {};
+                document.getElementById('cust-name').value = '';
+                document.getElementById('cust-table').value = '';
+                renderMenuKatalog();
+            }).catch(err => {
+                alert("Gagal mengirim pesanan: " + err.message);
+                document.getElementById('btn-submit-order').disabled = false;
+            });
+        }
+    </script>
+</body>
+</html>
